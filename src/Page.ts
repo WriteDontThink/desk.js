@@ -81,7 +81,6 @@ class Page {
             // Create the contenteditable wrapper
             this.contentWrapper = Util.createElement('div', {
                 "id": this.wrapperID,
-                "contenteditable": "true",
                 "class": wrapperClass,
                 // Disable the default content editable outline
                 "style": "outline: 0px solid transparent;"

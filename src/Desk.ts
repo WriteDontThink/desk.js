@@ -1,6 +1,7 @@
 import DeskConfig from "../types/DeskConfig";
 import {defaultConfig} from "./Defaults";
 import Page from "./Page";
+import DeskSnapshot from "../types/DeskSnapshot";
 
 export default class Desk {
     constructor(config: DeskConfig){
@@ -37,6 +38,14 @@ export default class Desk {
                 console.log("Got delta", delta, "on page", page);
             })
         }
+    }
+
+    public save(): DeskSnapshot {
+        const snapshot = {"pages": []};
+        for (let p in this.pages){
+            snapshot["pages"][p] = this.pages[p].quill.getContents();
+        }
+        return snapshot;
     }
 
     private pages: Page[];
