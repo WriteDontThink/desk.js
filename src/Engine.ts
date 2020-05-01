@@ -4,7 +4,6 @@ import {KeyboardShortcut, Shortcut, SpecialKey} from "../types/KeyboardShortcut"
 import DeskConfig from "../types/DeskConfig";
 import Page from "./Page";
 import { createElement } from './Util';
-import DeskSnapshot from "../types/DeskSnapshot";
 import BlockData from "../types/BlockData";
 
 const defaultShortcuts: Shortcut[] = [
@@ -382,9 +381,15 @@ export default class Engine {
         }
     }
 
-    private doOverflowCheck(mutationsList: MutationRecord[], p: Page){
+    private doOverflowCheck(delta, p: Page){
+        if (p.isOverflowing){
+            console.log("Overflow !!! ", delta, "page", p);
+        }
+    }
+
+    private oldDoOverflowCheck(mutationsList: MutationRecord[], p: Page){
         const nextPageItems: BlockData[] = [];
-        const pageBottom  = 200;
+        const pageBottom  = p.pageBottom;
         console.log(`Overflowing, page bottom is ${pageBottom} nodes:`);
         for (let childIdx in p.contentWrapper.children) {
             const child = p.contentWrapper.children.item((+childIdx));
@@ -465,24 +470,6 @@ export default class Engine {
         p.contentWrapper.dispatchEvent(event);
     }
 
-    public onPaste(e: ClipboardEvent, p: Page){
-        // A modified answer of Nico Burns's excellent SO answer on the subject,
-        // https://stackoverflow.com/a/6804718
-        const types = e.clipboardData.types;
-        // Rewrite HTML pastes
-        if (((types instanceof DOMStringList) && types.contains("text/html")) || (types.indexOf && types.indexOf('text/html') !== -1)) {
-
-            // Extract data and pass it to callback
-            const pastedData = e.clipboardData.getData('text/html');
-            console.log("Got paste", pastedData);
-
-            // Stop the data from actually being pasted
-            e.stopPropagation();
-            e.preventDefault();
-            return false;
-        }
-    }
-
     private debounceChange(ch: Change){
         // Determine whether debounce is configured
         if (this.config.debounceChanges){
@@ -513,15 +500,17 @@ export default class Engine {
         }
     }
 
+    public handleDelta(delta, p: Page){
+        this.doOverflowCheck(delta, p);
+    }
+
     public handleMutation(mutationsList: MutationRecord[], p: Page){
-        // Clean the blocks on the page
-        //p.clean();
         // Determine if the page is overflowing
-        /*if (p.isOverflowing){
-            this.doOverflowCheck(mutationsList, p);
+        if (p.isOverflowing){
+            this.oldDoOverflowCheck(mutationsList, p);
             return;
         }
-         */
+
         // Dispatch change events
         const foundBlocks = new Set<number>();
         const children = Array.from(p.contentWrapper.children);
@@ -546,7 +535,6 @@ export default class Engine {
             this.debounceChange(new Change(p, foundBlocks));
         }
     }
-
 
     /**
      * (This function is a modified version of the one used for this same purpose by the excellent project editor.js

@@ -1,6 +1,7 @@
 import {defaultConfig} from "./Defaults";
 import DeskConfig from "../types/DeskConfig";
 import Page from "./Page";
+import Engine from "./Engine";
 
 
 export default class QDesk{
@@ -28,7 +29,8 @@ export default class QDesk{
             config.sessionKey = config.sessionKey || defaultConfig.sessionKey;
         }
         this.config = config;
-
+        // Instantiate the text formatting engine
+        this.engine = new Engine(this.config);
         // Make sure that the holder element exists on the page
         this.editorHolder = document.getElementById(this.config.holder);
         if (this.editorHolder == null){
@@ -46,10 +48,13 @@ export default class QDesk{
             page.renderHolder();
             this.editorHolder.appendChild(page.pageHolder);
             page.renderQuill();
+            // Add a listener
+            page.quill.on('text-change',  (delta) => this.engine.handleDelta(delta, page))
         }
     }
 
     private editorHolder: HTMLElement;
+    private engine: Engine;
     private config: DeskConfig;
     private pages: Page[];
 }

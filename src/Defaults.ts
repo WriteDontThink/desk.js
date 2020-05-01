@@ -24,7 +24,7 @@ const defaultConfig: DeskConfig = {
     saveOnChange: false,
     genUID: uuid,
     debounceChanges: 500,
-    sessionKey: false
+    sessionKey: false,
 };
 
 export {defaultConfig};

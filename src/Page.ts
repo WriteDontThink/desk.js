@@ -9,6 +9,8 @@ import Quill from "quill";
 // The class name for a page in the DOM
 const pageClass = "desk-page";
 
+// The class name for a page wrapper in the DOM
+const wrapperClass = "desk-page-wrapper";
 
 class Page {
     /**
@@ -47,6 +49,10 @@ class Page {
         return `desk-page-${this.uid}`;
     }
 
+    public get wrapperID(): string{
+        return `desk-wrapper-${this.uid}`;
+    }
+
     /**
      * Render the blocks in a page, and bind an abstract page to the DOM.
      * Should only be called once per page per document
@@ -62,7 +68,7 @@ class Page {
          * | -------------
          * | | Wrapper   |
          * | | --------- |
-         * | | | Block | |
+         * | | | Quill | |
          * | | --------- |
          * | |           |
          * | ------------|
@@ -76,13 +82,44 @@ class Page {
                 "class": pageClass
             });
         }
+        if (this.contentWrapper == undefined) {
+            // Create the contenteditable wrapper
+            this.contentWrapper = Util.createElement('div', {
+                "id": this.wrapperID,
+                "contenteditable": "true",
+                "class": wrapperClass,
+                // Disable the default content editable outline
+                "style": "outline: 0px solid transparent;"
+            });
+        }
+        if (!this.pageHolder.hasChildNodes()){
+            this.pageHolder.appendChild(this.contentWrapper);
+        }
     }
 
     public renderQuill(){
         if (!this.quill){
             // Bind quill to that page
-            this.quill = new Quill(`#${this.domID}`);
+            this.quill = new Quill(`#${this.wrapperID}`, {});
         }
+    }
+
+    /**
+     * Check the height of the wrapper and the main page, and see if the content needs to break into a new page
+     */
+    public get isOverflowing(): boolean {
+        const bottom = this.pageBottom;
+        const lastElem = this.contentWrapper.children[this.contentWrapper.children.length - 1];
+        if (lastElem == undefined){
+            return false;
+        }
+        else {
+            return lastElem.getBoundingClientRect().bottom >= bottom;
+        }
+    }
+
+    public get pageBottom(): number {
+        return this.pageHolder.getBoundingClientRect().bottom - this.config.margins.bottom;
     }
 
 
