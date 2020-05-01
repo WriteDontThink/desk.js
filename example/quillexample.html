@@ -43,25 +43,11 @@
 </body>
 <script src="../dist/desk.js"></script>
 <script>
+
     const outputArea = document.getElementById("output-code");
 
-    let writes = 0;
-    let bytes = 0;
-    let startDate = Date.now();
-    function onDeskChange(e){
-        let endDate = Date.now();
-        writes++;
-        bytes += JSON.stringify(e).length;
-        let timeTaken = (endDate - startDate) / 1000;
-        console.log(`${timeTaken} seconds, ${writes} writes, ${bytes} bytes`);
-        console.log("Got desk change ", e);
-        outputArea.innerText = JSON.stringify(e, null, " ");
-        hljs.highlightBlock(outputArea);
-
-    }
     let d = new Desk({
         holder: "desk-editor",
-        onChange: onDeskChange,
         saveOnChange: false,
         pages: [
             {
@@ -76,18 +62,6 @@
         ],
     });
 
-    outputArea.innerText = JSON.stringify(d.save(), null, " ");
-    hljs.highlightBlock(outputArea);
-
-    function save(){
-        console.log("Saving");
-        let savedData = d.save();
-        console.log(savedData);
-    }
-
-    function bold(){
-        d.executeAction({action: 'makeBold', detail: {}})
-    }
 
 
 </script>

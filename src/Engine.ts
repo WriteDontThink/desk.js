@@ -384,7 +384,7 @@ export default class Engine {
 
     private doOverflowCheck(mutationsList: MutationRecord[], p: Page){
         const nextPageItems: BlockData[] = [];
-        const pageBottom  = p.pageBottom;
+        const pageBottom  = 200;
         console.log(`Overflowing, page bottom is ${pageBottom} nodes:`);
         for (let childIdx in p.contentWrapper.children) {
             const child = p.contentWrapper.children.item((+childIdx));
@@ -515,12 +515,13 @@ export default class Engine {
 
     public handleMutation(mutationsList: MutationRecord[], p: Page){
         // Clean the blocks on the page
-        p.clean();
+        //p.clean();
         // Determine if the page is overflowing
-        if (p.isOverflowing){
+        /*if (p.isOverflowing){
             this.doOverflowCheck(mutationsList, p);
             return;
         }
+         */
         // Dispatch change events
         const foundBlocks = new Set<number>();
         const children = Array.from(p.contentWrapper.children);

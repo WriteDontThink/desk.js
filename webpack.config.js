@@ -3,7 +3,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     entry: {
-        'desk': './src/Desk.ts'
+        'desk': './src/QDesk.ts'
     },
     devtool: "source-map",
     module: {
