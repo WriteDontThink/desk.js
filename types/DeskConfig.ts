@@ -1,7 +1,6 @@
 // Internal imports
-import PageData from "./PageData";
-import {Shortcut} from "./KeyboardShortcut";
 import DeskSnapshot from "./DeskSnapshot";
+import Delta from 'quill-delta';
 
 type Margin = "top" | "bottom" | "left" | "right"
 
@@ -16,7 +15,7 @@ interface DeskConfig{
     width?: string;
 
     // The data to load the editor with. An ordered list of pages
-    pages?: PageData[];
+    pages?: Delta[];
 
     // The page that the user is currently on. Defaults to 1
     onPage?: number;
@@ -37,12 +36,6 @@ interface DeskConfig{
     // Do you want to receive the entire document on change, or just the pages and blocks that have changed? Default is false
     saveOnChange?: boolean;
 
-    // The included Desk editing shortcuts. Override this to eliminate common shortcut
-    baseShortcuts: Shortcut[]
-
-    // Extra shortcuts that you want to include in the editor. Defaults to none
-    extraShortcuts: Shortcut[]
-
     // The classname of editor blocks
     blockClass: string;
 
@@ -55,9 +48,6 @@ interface DeskConfig{
 
     // The class name of a page content wrapper in the document. Default is "desk-page-wrapper"
     pageWrapperClass: string;
-
-    // Optionally provide a static session key. Otherwise, it will be automatically generated as a UUID
-    sessionKey?: string | false;
 
 }
 

@@ -1,7 +1,7 @@
-import PageData from "./PageData";
+import Delta from 'quill-delta';
 
 interface DeskSnapshot {
-    pages: { [pageNum: number]: PageData}
+    pages: { [pageNum: number]: Delta }
 }
 
 export default DeskSnapshot;

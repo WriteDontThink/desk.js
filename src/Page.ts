@@ -5,6 +5,7 @@ import * as Util from './Util';
 // External imports
 import BlockData from "../types/BlockData";
 import Quill from "quill";
+import Delta from "quill-delta";
 
 // The class name for a page in the DOM
 const pageClass = "desk-page";
@@ -17,19 +18,13 @@ class Page {
      * Create a new page
      *
      * @param config: The configuration of the desk
-     * @param data: Any data that the page is being instantiated with
+     * @param initialDelta: If the page already exists, its delta
      */
-    constructor(config: DeskConfig, data?: PageData){
+    constructor(config: DeskConfig, initialDelta?: Delta){
         this.config = config;
         // If the page wasn't passed a UID, generate a v4 UUID
-        if (data == undefined){
-            this.uid = config.genUID();
-            this.initialBlocks = [];
-        }
-        else{
-            this.uid = data.uid || config.genUID();
-            this.initialBlocks = data.blocks || {};
-        }
+        this.uid = config.genUID();
+        this.initialDelta = initialDelta;
     }
 
     /**
@@ -101,6 +96,9 @@ class Page {
         if (!this.quill){
             // Bind quill to that page
             this.quill = new Quill(`#${this.wrapperID}`, {});
+            if (this.initialDelta){
+                this.quill.setContents(this.initialDelta);
+            }
         }
     }
 
@@ -125,21 +123,6 @@ class Page {
 
     public countWords() {
         let wC = 0;
-        for (let childG in this.contentWrapper.children){
-            let child = this.contentWrapper.children[childG];
-            if (child && child.textContent) {
-                let words = this.contentWrapper.children[childG].textContent.split(" ");
-                words.forEach((word) => {
-                    // We don't want to count spaces or zero-width characters as words
-                    if (word && word != " " && word.length > 0){
-                        // Check for a zero width character
-                        if (word.charCodeAt(0) != 8203){
-                            wC++;
-                        }
-                    }
-                })
-            }
-        }
         this.wordCount = wC;
     }
 
@@ -149,7 +132,7 @@ class Page {
     public uid: string;
     public wordCount: number;
     private config: DeskConfig;
-    private initialBlocks: { [index: number]: BlockData };
+    private initialDelta: Delta;
 }
 
 export default Page;

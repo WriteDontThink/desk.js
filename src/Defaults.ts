@@ -1,5 +1,4 @@
 import DeskConfig from "../types/DeskConfig";
-import {defaultShortcuts} from "./Engine";
 import {uuid} from "./Util";
 
 const defaultConfig: DeskConfig = {
@@ -16,15 +15,12 @@ const defaultConfig: DeskConfig = {
         "top": 15,
         "bottom": 15
     },
-    baseShortcuts: defaultShortcuts,
-    extraShortcuts: [],
     blockClass: "desk-block",
     pageClass: "desk-page",
     pageWrapperClass: "desk-page-wrapper",
     saveOnChange: false,
     genUID: uuid,
     debounceChanges: 500,
-    sessionKey: false,
 };
 
 export {defaultConfig};
