@@ -233,32 +233,6 @@ export default class Engine {
         }
     }
 
-    /**
-     * Figure out the offset of a cursor
-     *
-     * @param p the page that the cursor is on
-     */
-    public updateCursorPosition(p: Page, ): CursorPosition {
-        let selection = window.getSelection();
-        // Is the cursor anywhere?
-        if (selection.type) {
-            // If so, get the content of the page that it's on
-
-            // If so, is it collapsed, or a selection?
-            if (selection.type == "Caret"){
-                // If it's collapsed,
-            }
-            else if (selection.type == "Range") {
-
-            }
-            else {
-                console.error(`Unknown selection type ${selection.type}`);
-                return;
-            }
-            //
-        }
-    }
-
     public onInput(i: InputEvent, p: Page) {
         console.log(i);
         console.log("Input of type", i.inputType);
