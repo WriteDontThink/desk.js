@@ -17,10 +17,8 @@ const defaultConfig: DeskConfig = {
     },
     blockClass: "desk-block",
     pageClass: "desk-page",
-    pageWrapperClass: "desk-page-wrapper",
     saveOnChange: false,
     genUID: uuid,
-    debounceChanges: 500,
 };
 
 export {defaultConfig};

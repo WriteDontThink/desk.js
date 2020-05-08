@@ -39,16 +39,8 @@ interface DeskConfig{
     // The classname of editor blocks
     blockClass: string;
 
-    // Whether or not to debounce type events. Set to a number if they should be debounced, or false if not. Default
-    // is 500 ms
-    debounceChanges: number | false;
-
     // The class name of a page in the document. Default is "desk-page"
     pageClass: string;
-
-    // The class name of a page content wrapper in the document. Default is "desk-page-wrapper"
-    pageWrapperClass: string;
-
 }
 
 export default DeskConfig;
